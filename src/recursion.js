@@ -131,7 +131,18 @@ var powerOfTwo = function(n) {
 
 // 9. Write a function that reverses a string.
 var reverse = function(string) {
+    if (string.length === 0){
+        return '';
+    }
+    
+    var reversed = reverse(string.slice(1));
+    reversed += string.charAt(0);
+    return reversed;
 };
+
+//  var list = range(x, y - 1);
+// list.push(y - 1);
+// return list;
 
 // 10. Write a function that determines if a string is a palindrome.
 var palindrome = function(string) {
@@ -196,7 +207,11 @@ var fizzBuzz = function(n) {
 // 20. Count the occurence of a value in a list.
 // countOccurrence([2,7,4,4,1,4], 4) // 3
 // countOccurrence([2,'banana',4,4,1,'banana'], 'banana') // 2
+
 var countOccurrence = function(array, value) {
+    if (!array.length) return 0;
+    
+    return (array[0] === value) + countOccurrence(array.slice(1), value);
 };
 
 // 21. Write a recursive version of map.
@@ -209,18 +224,56 @@ var rMap = function(array, callback) {
 // countKeysInObj(obj, 'r') // 1
 // countKeysInObj(obj, 'e') // 2
 var countKeysInObj = function(obj, key) {
+   var num = 0;
+   for (var prop in obj) {
+       if (prop === key) {
+           num++
+       }
+       var value = obj[prop];
+       if (typeof value === 'object'){
+           num += countKeysInObj(value, key);
+       }
+   }
+   return num;
 };
+
 
 // 23. Write a function that counts the number of times a value occurs in an object.
 // var obj = {'e':{'x':'y'},'t':{'r':{'e':'r'},'p':{'y':'r'}},'y':'e'};
 // countValuesInObj(obj, 'r') // 2
 // countValuesInObj(obj, 'e') // 1
 var countValuesInObj = function(obj, value) {
+    var num = 0;
+    for (var prop in obj) {
+        if (obj[prop] === value) {
+            num++
+        }
+        var val = obj[prop];
+        if (typeof val === 'object') {
+            num += countValuesInObj(val, value);
+        }
+    }
+    return num;
 };
 
 // 24. Find all keys in an object (and nested objects) by a provided name and rename
 // them to a provided new name while preserving the value stored at that key.
 var replaceKeysInObj = function(obj, oldKey, newKey) {
+        
+        for (var prop in obj) {
+            
+            if (prop === oldKey) {
+                obj[newKey] = obj[prop];
+                delete obj[prop];
+            }
+            
+            if (typeof obj[prop] === 'object'){
+                replaceKeysInObj(obj[prop], oldKey, newKey);
+            }
+
+        }
+        return obj;
+
 };
 
 // 25. Get the first n Fibonacci numbers. In the Fibonacci sequence, each subsequent
